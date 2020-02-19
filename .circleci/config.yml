@@ -35,8 +35,6 @@ workflows:
             - checkout
             - run:npm install
             - run:npm run build
-            -run: ./demo.js
+            - run: ./demo.js
             - store_artifacts:
                 path: demo
-
-
