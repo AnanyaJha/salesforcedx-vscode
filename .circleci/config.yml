@@ -10,31 +10,13 @@ workflows:
   welcome:
     # Run the welcome/run job in its own container
     jobs:
-      build:
+      demo:
         docker:
-          -image: python:3.6.3-jessie
-
-        working_directory: /tmp
+          - image: circleci/node:8.10.0
         steps:
-          - run:
-            name: Creating Dummy Artifacts
-            command: |
-              echo "my artifact file" > /tmp/artifact-1;
-              mkdir /tmp/artifacts;
-              echo "my artifact files in a dir" > /tmp/artifacts/artifact-2;
+          - checkout
+          - run:npm install
+          - run:npm run build
+          - run: ./demo.js
           - store_artifacts:
-            path: /tmp/artifact-1
-            destination: artifact-file
-
-          - store_artifacts:
-            path: /tmp/artifacts
-        demo:
-          docker:
-            - image: circleci/node:8.10.0
-          steps:
-            - checkout
-            - run:npm install
-            - run:npm run build
-            - run: ./demo.js
-            - store_artifacts:
-                path: demo
+              path: demo
