@@ -14,9 +14,6 @@ workflows:
         docker:
           - image: circleci/node:8.10.0
         steps:
-          - checkout
-          - run:npm install
-          - run:npm run build
           - run: ./demo.js
           - store_artifacts:
               path: demo
