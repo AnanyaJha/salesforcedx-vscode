@@ -7,10 +7,10 @@ orbs:
 # Orchestrate or schedule a set of jobs
 workflows:
   # Name the workflow "welcome"
-  welcome:
+  build:
     # Run the welcome/run job in its own container
 jobs:
-  welcome:
+  build:
     docker:
       - image: python:3.6.3-jessie
 
