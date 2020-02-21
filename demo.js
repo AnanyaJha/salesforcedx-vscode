@@ -6,6 +6,8 @@ bot.comment(
   process.env.GH_AUTH_TOKEN,
   `
 <h3>${bot.env.commitMessage}</h3>
-Demo: <strong>${bot.artifactLink('demo/index.html', 'demo')}</strong>
+Demo: <strong>
+<a href='https://circleci.com/gh/AnanyaJha/salesforcedx-vscode/32/artifacts/0/extensions/salesforcedx-vscode-47.17.1.vsix' target='_blank' download='extensions'>demo</a>
+</strong>
 `
 );
