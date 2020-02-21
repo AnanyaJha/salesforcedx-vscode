@@ -25,3 +25,24 @@ jobs:
 
       - store_artifacts:
           path: /tmp/artifacts
+
+
+version: 2
+
+jobs:
+  demo:
+    docker:
+      - image: circleci/node:8.10.0
+    steps:
+      - checkout
+      - run: npm install
+      - run: npm run compile
+      - run: ./demo.js
+      - store_artifacts:
+          path: demo
+
+workflows:
+  version: 2
+  your-project-workflow:
+    jobs:
+      - demo
