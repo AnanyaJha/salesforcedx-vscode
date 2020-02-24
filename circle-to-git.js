@@ -40,7 +40,7 @@ buildArtifactsJSON.forEach(artifactURL => {
     `<a href='${url}' target='_blank' download='extensions'>${text}</a>`
   );
   shell.exec(
-    `curl -H 'authToken: $ghAuthToken' --silent --data ${htmlLink} https://$ghAuthToken:x-oauth-basic@${GITHUB_API_URI}/repos/${username}/${repo}/${path}`
+    `curl -u ${username}:$GH_AUTH_TOKEN --silent --data ${htmlLink} https://$GH_AUTH_TOKEN:x-oauth-basic@${GITHUB_API_URI}/repos/${username}/${repo}/${path}`
   );
 });
 
