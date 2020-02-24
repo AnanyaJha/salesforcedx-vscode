@@ -18,8 +18,6 @@ const prNumber = ipath.basename(
 const circleBuildNum = process.env['CIRCLE_BUILD_NUM'];
 const circleToken = process.env['CIRCLE_API_USER_TOKEN'];
 const ghAuthToken = process.env['GH_AUTH_TOKEN'];
-console.log('git token' + ghAuthToken);
-console.log('circle token' + circleToken);
 
 // check if something is missing
 
@@ -35,6 +33,7 @@ const buildArtifactsJSON = JSON.parse(cciArtifacts);
 const artifactUrls = [];
 const text = 'Extension';
 const path = `issues/${prNumber}/comments`;
+console.log('these are artifacts' + buildArtifactsJSON + 'end of artifacts');
 buildArtifactsJSON.forEach(artifactURL => {
   const url = artifactURL.url;
   const htmlLink = `<a href='${url}' target='_blank' download='extensions'>${text}</a>`;
