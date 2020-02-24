@@ -36,10 +36,11 @@ buildArtifactsJSON.forEach(artifactURL => {
   console.log(artifactURL.url);
   console.log(artifactURL.path);
   const url = artifactURL.url;
-  const htmlLink = `<a href='${url}' target='_blank' download='extensions'>${text}</a>`;
+  const htmlLink = JSON.stringify(
+    `<a href='${url}' target='_blank' download='extensions'>${text}</a>`
+  );
   shell.exec(
-    `curl --silent --data @- https://${ghAuthToken}:x-oauth-basic@${GITHUB_API_URI}/repos/${username}/${repo}/${path}`,
-    { input: JSON.stringify(htmlLink) }
+    `curl --silent --data ${htmlLink} https://$ghAuthToken:x-oauth-basic@${GITHUB_API_URI}/repos/${username}/${repo}/${path}`
   );
 });
 
