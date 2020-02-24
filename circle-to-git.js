@@ -35,6 +35,8 @@ const text = 'Extension';
 const path = `issues/${prNumber}/comments`;
 console.log('these are artifacts' + buildArtifactsJSON + 'end of artifacts');
 buildArtifactsJSON.forEach(artifactURL => {
+  console.log(artifactURL.url);
+  console.log(artifactURL.path);
   const url = artifactURL.url;
   const htmlLink = `<a href='${url}' target='_blank' download='extensions'>${text}</a>`;
   shell.exec(
