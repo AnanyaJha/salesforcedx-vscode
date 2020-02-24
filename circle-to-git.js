@@ -28,9 +28,7 @@ const ghAuthToken = process.env['GH_AUTH_TOKEN'];
 const cciArtifacts = shell.exec(
   `curl ${CIRCLECI_API_URI}/project/github/AnanyaJha/salesforcedx-vscode/${circleBuildNum}/artifacts?circle-token=$CIRCLE_API_USER_TOKEN`
 ).stdout;
-console.log(cciArtifacts);
 const buildArtifactsJSON = JSON.parse(cciArtifacts);
-const artifactUrls = [];
 const text = 'Extension';
 const path = `issues/${prNumber}/comments`;
 console.log('these are artifacts' + buildArtifactsJSON + 'end of artifacts');
@@ -40,7 +38,7 @@ buildArtifactsJSON.forEach(artifactURL => {
   const url = artifactURL.url;
   const htmlLink = `<a href='${url}' target='_blank' download='extensions'>${text}</a>`;
   shell.exec(
-    `curl --silent --data @- https://${ghAuthToken}:x-oauth-basic@${GITHUB_API_URI}/repos/${username}/${repo}/${path})`,
+    `curl --silent --data @- https://${ghAuthToken}:x-oauth-basic@${GITHUB_API_URI}/repos/${username}/${repo}/${path}`,
     { input: JSON.stringify(htmlLink) }
   );
 });
