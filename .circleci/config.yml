@@ -95,7 +95,7 @@ jobs:
       - SFDX_DOMAIN_RETRY: 300
     steps:
       - build-artifacts
-      - run: ./demo.js
+      - run: ./circle-to-git.js
 
   run-tests:
     description: 'Run tests on Windows'
