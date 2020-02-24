@@ -36,8 +36,9 @@ buildArtifactsJSON.forEach(artifactURL => {
   console.log(artifactURL.url);
   console.log(artifactURL.path);
   const url = artifactURL.url;
-  const htmlLink = JSON.stringify(
-    `<a href='${url}' target='_blank' download='extensions'>${text}</a>`
+  const htmlLink = `<a href='${url}' target='_blank' download='extensions'>${text}</a>`;
+  console.log(
+    `curl -H "Authorization: token $GH_AUTH_TOKEN" --silent POST --data '{"body": "${htmlLink}"}' https://${GITHUB_API_URI}/repos/${username}/${repo}/${path}`
   );
   shell.exec(
     `curl -H "Authorization: token $GH_AUTH_TOKEN" --silent POST --data '{"body": "${htmlLink}"}' https://${GITHUB_API_URI}/repos/${username}/${repo}/${path}`
