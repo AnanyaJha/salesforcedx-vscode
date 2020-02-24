@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-import { basename } from 'path';
+const ipath = require('path');
 // tslint:disable-next-line:no-var-requires
 const shell = require('shelljs');
 shell.set('-e');
@@ -12,12 +12,14 @@ const buildUrl = process.env['CIRCLE_BUILD_URL'];
 const repo = process.env['CIRCLE_PROJECT_REPONAME'];
 const sha1 = process.env['CIRCLE_SHA1'];
 const username = process.env['CIRCLE_PROJECT_USERNAME'];
-const prNumber = basename(
+const prNumber = ipath.basename(
   process.env['CIRCLE_PULL_REQUEST'] || process.env['CI_PULL_REQUEST'] || ''
 );
 const circleBuildNum = process.env['CIRCLE_BUILD_NUM'];
 const circleToken = process.env['CIRCLE_API_USER_TOKEN'];
 const ghAuthToken = process.env['GH_AUTH_TOKEN'];
+console.log('git token' + ghAuthToken);
+console.log('circle token' + circleToken);
 
 // check if something is missing
 
@@ -25,15 +27,10 @@ const ghAuthToken = process.env['GH_AUTH_TOKEN'];
 
 // build the url for artifacts
 // Get artifact names from CircleCI build
-const cciArtifacts = shell
-  .exec(
-    `curl ${CIRCLECI_API_URI}/project/github/forcedotcom/salesforcedx-vscode/${circleBuildNum}/artifacts?circle-token=${circleToken}`,
-    {
-      silent: true
-    }
-  )
-  .stdout.trim();
-
+const cciArtifacts = shell.exec(
+  `curl ${CIRCLECI_API_URI}/project/github/AnanyaJha/salesforcedx-vscode/${circleBuildNum}/artifacts?circle-token=$CIRCLE_API_USER_TOKEN`
+).stdout;
+console.log(cciArtifacts);
 const buildArtifactsJSON = JSON.parse(cciArtifacts);
 const artifactUrls = [];
 const text = 'Extension';
@@ -45,3 +42,5 @@ buildArtifactsJSON.forEach(artifactURL => {
     `curl(https://${ghAuthToken}:x-oauth-basic@${GITHUB_API_URI}/repos/${username}/${repo}/${path}, JSON.stringify(${htmlLink})`
   );
 });
+
+// 3658b69f2c338e0dc29c02487c62ac7e998f1e8d
