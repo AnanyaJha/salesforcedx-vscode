@@ -20,14 +20,20 @@ const cciArtifacts = shell.exec(
   `curl ${CIRCLECI_API_URI}/project/github/AnanyaJha/salesforcedx-vscode/${circleBuildNum}/artifacts?circle-token=$CIRCLE_API_USER_TOKEN`
 ).stdout;
 const buildArtifactsJSON = JSON.parse(cciArtifacts);
-const text = 'Here are the Circle CI artifacts for this build:<br>';
-buildArtifactsJSON.forEach(artifact => {
-  const url = artifact.url;
-  const extName = path.basename(artifact.url);
-  const htmlLink = `${text}<a href='${url}' target='_blank' download='extensions'>${extName}</a><br>`;
-  text += htmlLink;
-});
+let text;
+
+if (buildArtifactsJSON) {
+  text = 'Here are the Circle CI artifacts for this build:<br>';
+  buildArtifactsJSON.forEach(artifact => {
+    const url = artifact.url;
+    const extName = path.basename(artifact.url);
+    const htmlLink = `${text}<a href='${url}' target='_blank' download='extensions'>${extName}</a><br>`;
+    text += htmlLink;
+  });
+} else {
+  text = `Looks like your build did not generate any artifacts! Check out what happened <a href='$CIRCLE_BUILD_URL' target='_blank' download='extensions'>here</a><br>`;
+}
 
 shell.exec(
-  `curl -H "Authorization: token $GH_AUTH_TOKEN" --silent POST --data '{"body": "${htmlLink}"}' ${GITHUB_API_URI}/repos/${username}/${repo}/issues/${prNumber}/comments`
+  `curl -H "Authorization: token $GH_AUTH_TOKEN" --silent POST --data '{"body": "${text}"}' ${GITHUB_API_URI}/repos/${username}/${repo}/issues/${prNumber}/comments`
 );
