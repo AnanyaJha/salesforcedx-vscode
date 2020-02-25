@@ -24,10 +24,9 @@ const buildArtifactsJSON = JSON.parse(cciArtifacts);
 const text = 'Here are the Circle CI artifacts for this build:<br>';
 console.log('these are artifacts' + buildArtifactsJSON + 'end of artifacts');
 buildArtifactsJSON.forEach(artifactURL => {
-  console.log(artifactURL.url);
-  console.log(artifactURL.path);
   const url = artifactURL.url;
-  const htmlLink = `<a href='${url}' target='_blank' download='extensions'>${text}</a>`;
+  const name = path.basename(artifactURL.url);
+  const htmlLink = `${text}<a href='${url}' target='_blank' download='extensions'>${name}</a>`;
   shell.exec(
     `curl -H "Authorization: token $GH_AUTH_TOKEN" --silent POST --data '{"body": "${htmlLink}"}' ${GITHUB_API_URI}/repos/${username}/${repo}/issues/${prNumber}/comments`
   );
