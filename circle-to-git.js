@@ -27,7 +27,7 @@ if (buildArtifactsJSON) {
   buildArtifactsJSON.forEach(artifact => {
     const url = artifact.url;
     const extName = path.basename(artifact.url);
-    const htmlLink = `${text}<a href='${url}' target='_blank' download='extensions'>${extName}</a><br>`;
+    const htmlLink = `<a href='${url}' target='_blank' download='extensions'>${extName}</a><br>`;
     text += htmlLink;
   });
 } else {
