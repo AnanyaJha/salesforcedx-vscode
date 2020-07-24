@@ -35,5 +35,5 @@ if (buildArtifactsJSON) {
 }
 
 shell.exec(
-  `curl -H "Authorization: token $GH_AUTH_TOKEN" --silent POST --data '{"body": "${text}"}' ${GITHUB_API_URI}/repos/${username}/${repo}/issues/${prNumber}/comments`
+  `curl -H "Authorization: token $CIRCLE_GIT_TOKEN" --silent POST --data '{"body": "${text}"}' ${GITHUB_API_URI}/repos/${username}/${repo}/issues/${prNumber}/comments`
 );
