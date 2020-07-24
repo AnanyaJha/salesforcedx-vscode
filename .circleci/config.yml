@@ -181,6 +181,7 @@ commands:
       - package-extensions
       - stage-and-store-artifacts
       - save_dependency_cache
+      - run: scripts/circle-to-git.js
 
   build-win:
     description: 'Build for Windows.'
@@ -244,6 +245,7 @@ jobs:
       - SFDX_DOMAIN_RETRY: << pipeline.parameters.domain-retry >>
     steps:
       - build-artifacts
+      -
 
   unit-tests:
     description: 'Run tests on Windows'
@@ -330,56 +332,6 @@ jobs:
               $host.SetShouldExit(1)
             }
 
-  publish:
-    parameters:
-      e:
-        type: executor
-    executor: << parameters.e >>
-    steps:
-      - slack/notify:
-          channel: 'pdt_releases'
-          color: '#FFDEAD'
-          message: 'Starting publish for VSCode Extensions'
-      - ssh-config
-      - checkout
-      - gus-prepare-environment-variables
-      - restore_dependency_cache
-      - run:
-          name: 'Setup gus case management'
-          command: |
-            sudo npm install -g @salesforce/change-case-management
-      - sfchangecase/create:
-          location: REPO_LOCATION
-          release: GUS_RELEASE
-      - sfchangecase/check:
-          location: REPO_LOCATION
-          release: GUS_RELEASE
-      - gh-config
-      - install
-      - compile
-      - package-extensions
-      - updating-sha-for-publish
-      - run:
-          name: 'Publishing to the VS Code Marketplace.'
-          command: npm run vscode:publish
-      - stage-and-store-artifacts
-      - run:
-          name: 'Create git tag (e.g. v48.1.0) & push changes back to master branch'
-          command: |
-            git tag v${RELEASE_VERSION}
-            git push origin v${RELEASE_VERSION}
-            git push origin master
-      - sfchangecase/update:
-          location: REPO_LOCATION
-          release: GUS_RELEASE
-      - slack/notify:
-          channel: 'pdt_releases'
-          color: '#9bcd9b'
-          message: 'VSCode Extensions v${RELEASE_VERSION} have been published to the marketplace'
-      - slack/status:
-          channel: 'pdt_releases'
-          fail_only: true
-
   create-release-branch:
     parameters:
       e:
@@ -424,30 +376,6 @@ workflows:
       - build-all
       - unit-tests
       - integration-tests
-
-  publish-workflow:
-    when: << pipeline.parameters.publish >>
-    jobs:
-      - slack/approval-notification:
-          message: Pending Approval for Publish
-          channel: 'pdt_releases'
-          color: '#0E1111'
-      - build-all
-      - unit-tests
-      - integration-tests
-      - hold: # Requires manual approval in Circle Ci
-          type: approval
-      - publish:
-          e: default-executor
-          requires:
-            - build-all
-            - unit-tests
-            - integration-tests
-            - hold
-          filters:
-            branches:
-              only:
-                - master
 
   create-release-branch-workflow:
     when: << pipeline.parameters.create-release >>
