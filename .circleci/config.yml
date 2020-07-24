@@ -245,7 +245,6 @@ jobs:
       - SFDX_DOMAIN_RETRY: << pipeline.parameters.domain-retry >>
     steps:
       - build-artifacts
-      -
 
   unit-tests:
     description: 'Run tests on Windows'
